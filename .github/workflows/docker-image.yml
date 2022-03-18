@@ -1,0 +1,23 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ main ]
+    # Publish `v1.2.3` tags as releases.
+    tags: [ v* ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build the Docker image
+      run: |
+        REPONAME=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]' )
+        DOCKER_IMAGE=ghcr.io/$REPONAME
+        docker build . --file Dockerfile --tag $DOCKER_IMAGE:$(date +%s)

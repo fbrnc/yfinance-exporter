@@ -2,18 +2,12 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ main ]
-    # Publish `v1.2.3` tags as releases.
     tags: [ v* ]
-  pull_request:
-    branches: [ main ]
 
 jobs:
 
   build:
-
     runs-on: ubuntu-latest
-
     steps:
 
     - uses: actions/checkout@v2
@@ -25,13 +19,13 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Build the Docker image
-      id: build
+    - name: Preparing variables
+      id: prepare
       run: |
         REPONAME=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]' )
         DOCKER_IMAGE=ghcr.io/$REPONAME
-        IMAGE_VERSION=$(date +%s)
-        docker build . --file Dockerfile --tag $DOCKER_IMAGE:IMAGE_VERSION
+        # IMAGE_VERSION=$(date +%s)
+        IMAGE_VERSION=${GITHUB_REF#refs/*/}
         echo ::set-output name=IMAGE_VERSION::${IMAGE_VERSION}
         echo ::set-output name=DOCKER_IMAGE::${DOCKER_IMAGE}
 
@@ -39,4 +33,4 @@ jobs:
       uses: docker/build-push-action@v2
       with:
         push: true
-        tags: ${{ steps.build.outputs.DOCKER_IMAGE }}:${{ steps.build.outputs.IMAGE_VERSION }}
+        tags: ${{ steps.prepare.outputs.DOCKER_IMAGE }}:${{ steps.prepare.outputs.IMAGE_VERSION }}

@@ -1,0 +1,3 @@
+prometheus-client==0.13.1
+yfinance==0.1.70
+aiocron~=1.8

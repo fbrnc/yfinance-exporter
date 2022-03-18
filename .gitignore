@@ -1,0 +1,4 @@
+yfinance.log
+backfill
+__pycache__/*
+config.json

@@ -41,3 +41,27 @@ yfinance_price{currency="EUR",name="Tesla Inc",symbol="TL0.DE"} 812.0
 # TYPE yfinance_last_update gauge
 yfinance_last_update 1.647635043e+09
 ```
+
+## Docker compose example (with inline configuration)   
+
+Hint: You need to login via `docker login ghcr.io -u USERNAME` first to pull the image. (see [Github documentation](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry#authenticating-to-the-container-registry))
+
+```
+version: "3.7"
+services:
+  yfinance-exporter:
+    image: ghcr.io/fbrnc/yfinance-exporter:v0.0.4
+    container_name: yfinance-exporter
+    restart: unless-stopped
+    environment:
+      # YFINANCE_EXPORTER_PORT: 8000
+      # YFINANCE_EXPORTER_METRIC_NAME: yfinance_price
+      # YFINANCE_EXPORTER_CRON_EXPRESSION: '*/10 * * * *'
+      YFINANCE_EXPORTER_CONFIG: |
+        {
+          "AMZ.DE": { "name": "Amazon.com Inc", "currency": "EUR" },
+          "TL0.DE": { "name": "Tesla Inc", "currency": "EUR" }
+        }
+    ports:
+      - "8000:8000"
+```

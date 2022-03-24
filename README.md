@@ -33,13 +33,26 @@ a matching symbol for a given WKN or ISIN.
 ## Example
 
 ```
-# HELP yfinance_price Current price
 # TYPE yfinance_price gauge
-yfinance_price{currency="EUR",name="Amazon.com Inc",symbol="AMZ.DE"} 2878.5
-yfinance_price{currency="EUR",name="Tesla Inc",symbol="TL0.DE"} 812.0
+yfinance_price{currency="EUR",name="Amazon.com Inc",symbol="AMZ.DE",type="Open"} 2999.5
+yfinance_price{currency="EUR",name="Amazon.com Inc",symbol="AMZ.DE",type="High"} 3023.0
+yfinance_price{currency="EUR",name="Amazon.com Inc",symbol="AMZ.DE",type="Low"} 2966.5
+yfinance_price{currency="EUR",name="Amazon.com Inc",symbol="AMZ.DE",type="Close"} 3009.0
+yfinance_price{currency="EUR",name="Amazon.com Inc",symbol="AMZ.DE",type="Volume"} 5249.0
+yfinance_price{currency="EUR",name="Amazon.com Inc",symbol="AMZ.DE",type="Dividends"} 0.0
+yfinance_price{currency="EUR",name="Amazon.com Inc",symbol="AMZ.DE",type="Stock Splits"} 0.0
+yfinance_price{currency="EUR",name="Tesla Inc",symbol="TL0.DE",type="Open"} 896.0
+yfinance_price{currency="EUR",name="Tesla Inc",symbol="TL0.DE",type="High"} 945.5
+yfinance_price{currency="EUR",name="Tesla Inc",symbol="TL0.DE",type="Low"} 888.7999877929688
+yfinance_price{currency="EUR",name="Tesla Inc",symbol="TL0.DE",type="Close"} 928.5
+yfinance_price{currency="EUR",name="Tesla Inc",symbol="TL0.DE",type="Volume"} 79857.0
+yfinance_price{currency="EUR",name="Tesla Inc",symbol="TL0.DE",type="Dividends"} 0.0
+yfinance_price{currency="EUR",name="Tesla Inc",symbol="TL0.DE",type="Stock Splits"} 0.0
 # HELP yfinance_last_update Last API update
 # TYPE yfinance_last_update gauge
-yfinance_last_update 1.647635043e+09
+yfinance_last_update 1.648106591e+09
+
+
 ```
 
 ## Docker compose example (with inline configuration)   

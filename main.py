@@ -25,14 +25,8 @@ if config.startswith('file://'):
 config = json.loads(config)
 
 registry = CollectorRegistry()
-metric = Gauge(metric_name, 'Current price', ['symbol', 'name', 'currency'], registry=registry)
+metric = Gauge(metric_name, 'Current price', ['symbol', 'name', 'currency', 'type'], registry=registry)
 last_update = Gauge('yfinance_last_update', 'Last API update', registry=registry)
-
-
-def get_current_price(symbol):
-    ticker = yfinance.Ticker(symbol)
-    todays_data = ticker.history(period='1d')
-    return todays_data['Close'][0]
 
 
 @aiocron.crontab(cron_expression)
@@ -45,9 +39,12 @@ def update_metric():
     logging.info("Updating...")
     for symbol, labels in config.items():
         try:
-            value = get_current_price(symbol)
-            metric.labels(symbol=symbol, name=labels['name'], currency=labels['currency']).set(value)
-            logging.info(f"Getting value for {labels['name']} ({symbol}) [{labels['currency']}]: {round(value, 2)}")
+            ticker = yfinance.Ticker(symbol)
+            todays_data = ticker.history(period='1d')
+            for key in todays_data.keys():
+                value = todays_data[key][0]
+                metric.labels(type=key, symbol=symbol, name=labels['name'], currency=labels['currency']).set(value)
+                logging.info(f"Getting {key} value for {labels['name']} ({symbol}) [{labels['currency']}]: {round(value, 2)}")
         except:
             logging.error(f"An exception occurred while getting value for {labels['name']} ({symbol}) [{labels['currency']}]")
 
